@@ -134,7 +134,7 @@ function jq_need(){
 function main(){
 	root_need
 	jq_need
-	curl -sLo /root/update_users_policy.sh https://github.com/duckeaty/update_users_policy.sh
+	curl -sLo /root/update_users_policy.sh https://github.com/duckeaty/main.sh
 	clear
 	main_updatepolicy $1
 }
