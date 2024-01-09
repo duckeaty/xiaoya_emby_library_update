@@ -58,6 +58,7 @@ function main_updatepolicy(){
 	echo -e "所有用户策略更新成功！"
 	echo -e "——————————————————————————————————————————————————————————————————————————————————"
 	INFO "请打开小雅EMBY测试该脚本是否有效"
+	script_path=$(cd `dirname $0`; pwd)
 	read -ep "有效(任意键)/无效(N)" isRight
 	if [[ $isRight == "N" || $isRight == "n" ]]; then
 		echo echo -e "请TG群内反馈，暂不要使用该脚本"
@@ -66,17 +67,18 @@ function main_updatepolicy(){
 		echo -e "——————————————————————————————————————————————————————————————————————————————————"
 		echo -e "如需每天6点30分自动执行，在命令行输入："
 		echo -e "crontab -e ,然后添加以下内容："
-		echo -e "30 6 * * * bash -c \"\$(cat 本脚本的绝对地址)\" -s s"
+		echo -e "30 6 * * * bash -c \"\$(cat $script_path/update_users_policy.sh)\" -s s"
 		echo -e "——————————————————————————————————————————————————————————————————————————————————"
 		echo -e "一键添加计划任务"
 		INFO "强烈建议自行手动添加！"
-		read -ep "手动添加(任意键)/自动添加(Y)" isRight
+		INFO "自动添加请一定要确认本脚本文件名未更改，为：update_users_policy.sh"
+		INFO "如果已经添加过，只是更新EMBY地址或EMBY的API密钥，不要重复添加计划，直接跳过!"
+		INFO "如果需要调整时间，请手动在crontab -e中删除多余的计划！"
+		read -ep "手动添加或跳过(任意键)/自动添加(Y)" isRight
 		if [[ $isRight == "Y" || $isRight == "y" ]]; then
-			INFO "请输入计划时间，例：30 6 * * *，这个代表每天6点30分，注意，数字和*之前都有空格，格式一定要正确！"
+			INFO "请输入计划时间，例：40 6 * * *，这个代表每天6点40分，注意，数字和*之前都有空格，格式一定要正确！"
 			read -ep "请输入：" crontab_time
-			script_path=$(cd `dirname $0`; pwd)
-			script_filename=$(basename $0)
-			(crontab -l 2>/dev/null; echo "$crontab_time bash -c \"\$(cat $script_path/$script_filename)\" -s s") | crontab -
+			(crontab -l 2>/dev/null; echo "$crontab_time bash -c \"\$(cat $script_path/update_users_policy.sh\" -s s") | crontab -
 			INFO "添加自动计划成功，请自行crontab验证！"
 			INFO "请不要更改本脚本目录地址及文件名，否则会出错或失效，如需更改，请自行crontab -e中删除该计划，然后重新运行本脚本！"
 		fi
@@ -134,7 +136,6 @@ function jq_need(){
 function main(){
 	root_need
 	jq_need
-	curl -sLo /root/update_users_policy.sh https://github.com/duckeaty/main.sh
 	clear
 	main_updatepolicy $1
 }
