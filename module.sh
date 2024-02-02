@@ -79,10 +79,13 @@ function update_config(){
         mkdir -p ${emby_config_data_new}/library_bak
     fi
     sqlite3 ${emby_config_data_new}/library.db ".dump UserDatas" > /root/xiaoya_emby_library_user.sql
+    sqlite3 ${emby_config_data_new}/library.db ".dump ItemExtradata" > /root/xiaoya_emby_library_mediaconfig.sql
     mv -f ${emby_config_data_new}/library.db* ${emby_config_data_new}/library_bak/
     cp -f ${emby_config_data}/library.db ${emby_config_data_new}/
     sqlite3 ${emby_config_data_new}/library.db "DROP TABLE IF EXISTS UserDatas;"
     sqlite3 ${emby_config_data_new}/library.db ".read /root/xiaoya_emby_library_user.sql"
+    sqlite3 ${emby_config_data_new}/library.db "DROP TABLE IF EXISTS ItemExtradata;"
+    sqlite3 ${emby_config_data_new}/library.db ".read /root/xiaoya_emby_library_mediaconfig.sql"
     chmod 777 ${emby_config_data_new}/library.db*
     docker start ${EMBY_NAME}
     echo -e "——————————————————————————————————————————————————————————————————————————————————"
