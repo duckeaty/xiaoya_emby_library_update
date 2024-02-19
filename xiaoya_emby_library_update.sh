@@ -262,11 +262,11 @@ function emby_reinstall(){
 	fi
 	case $cpu_arch in
 		"x86_64" | *"amd64"*)
-			docker run -d --name $emby_name -v /etc/nsswitch.conf:/etc/nsswitch.conf ${emby_dri} -v ${MEDIA_DIR}/config:/config -v ${MEDIA_DIR}/config_data:/config/data -v ${MEDIA_DIR}/xiaoya:/media ${emby_proxy} --net=host --user 0:0 --restart always emby/embyserver:$emby_ver
+			docker run -d --name $emby_name -v /etc/nsswitch.conf:/etc/nsswitch.conf ${emby_dri} -v ${MEDIA_DIR}/config:/config -v ${MEDIA_DIR}/config_data:/config/data -v ${MEDIA_DIR}/xiaoya:/media ${emby_proxy} --net=host -e UID=0 -e GID=0 -e GLIST=0 --restart always emby/embyserver:$emby_ver
 			echo "EMBY增加CONFIG映射目录及更新完成"
 			;;
 		"aarch64" | *"arm64"* | *"armv8"* | *"arm/v8"*)
-		    docker run -d --name $emby_name -v /etc/nsswitch.conf:/etc/nsswitch.conf ${emby_dri} -v ${MEDIA_DIR}/config:/config -v ${MEDIA_DIR}/config_data:/config/data -v ${MEDIA_DIR}/xiaoya:/media ${emby_proxy} --net=host  --user 0:0 --restart always emby/embyserver_arm64v8:$emby_ver
+		    docker run -d --name $emby_name -v /etc/nsswitch.conf:/etc/nsswitch.conf ${emby_dri} -v ${MEDIA_DIR}/config:/config -v ${MEDIA_DIR}/config_data:/config/data -v ${MEDIA_DIR}/xiaoya:/media ${emby_proxy} --net=host -e UID=0 -e GID=0 -e GLIST=0 --restart always emby/embyserver_arm64v8:$emby_ver
 			echo "EMBY增加CONFIG映射目录及更新完成"
             ;;
 		*)
